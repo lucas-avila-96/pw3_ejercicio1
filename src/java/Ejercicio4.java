@@ -6,17 +6,16 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.RequestDispatcher;
 
 /**
  *
  * @author Lucas
  */
-@WebServlet(urlPatterns = {"/register"})
-public class NewServlet extends HttpServlet {
+public class Ejercicio4 extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,17 +29,21 @@ public class NewServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String title = "Su Informacion";
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<html>" + "<body bgcolor=\"#fdf5e6\">\n" + 
-                    "<h1 align=center>" + title + "</h1>\n" + "<ul>\n" + 
-                    "<li><b>Nombre</b>:" + request.getParameter("name") + "\n" +
-                    " <li><b>email</b>: " + request.getParameter("email") + "\n" +
-                    "</ul>\n" + "</body></html>");
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet Ejercicio4</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet Ejercicio4 at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -52,7 +55,30 @@ public class NewServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html>" + "<head><title>Hola</title></head>");
+        out.println("<body bgcolor=\"#ffffff\">"
+                + "<img src=\"images/duke.png\" alt=\"Duke no esta....\">"
+                + "<h2>Hola, mi nombre es Duke. ¿Cuál es tu nombre y hobby?</h2>"
+                + "<form method=\"get\">"
+                + "<input type=\"text\" name=\"nombre\" size=\"25\" placeholder=\"Ingresa tu nombre\"><br><br>"
+                + "<input type=\"text\" name=\"hobby\" size=\"25\" placeholder=\"Ingresa tu hobby\"><br><br>"
+                + "<input type=\"submit\" value=\"Enviar\">"
+                + "<input type=\"reset\" value=\"Reiniciar\">" + "</form>");
+        String nombre = request.getParameter("nombre");
+
+        if ((nombre != null) && (nombre.length() > 0)) {
+            out.println(nombre);
+            RequestDispatcher dispatcher
+                    = getServletContext()
+                            .getRequestDispatcher("/respuesta");
+            if (dispatcher != null) {
+                dispatcher.include(request, response);
+            }
+        }
+        out.println("</body></html>");
+        out.close();
     }
 
     /**
